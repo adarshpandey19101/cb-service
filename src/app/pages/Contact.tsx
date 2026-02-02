@@ -13,6 +13,7 @@ export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     company: '',
     message: ''
   });
@@ -31,7 +32,7 @@ export function Contact() {
       setIsSubmitted(true);
       setTimeout(() => {
         setIsSubmitted(false);
-        setFormData({ name: '', email: '', company: '', message: '' });
+        setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       }, 5000);
     } catch (err: any) {
       setError(err.message || 'Failed to send message. Please try again.');
@@ -189,6 +190,22 @@ export function Contact() {
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="your.email@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-gray-700 mb-2">
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="+91 1234567890"
                   />
                 </div>
 

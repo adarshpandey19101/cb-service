@@ -9,7 +9,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <img src={logoImage} alt="CodingBits" className="h-10 w-auto mb-4 brightness-0 invert" />
+            <Link to="/">
+              <img
+                src={logoImage}
+                alt="CodingBits"
+                className="h-10 w-auto mb-4"
+              />
+            </Link>
             <p className="text-sm text-gray-400 mb-4">
               A technology services company building modern digital solutions for startups and businesses.
             </p>

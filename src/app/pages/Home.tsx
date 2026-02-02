@@ -2,6 +2,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Smartphone, Brain, CheckCircle } from 'lucide-react';
 import { SEO } from '@/app/components/SEO';
+import heroImage from '/Users/adarshkumarpandey21/.gemini/antigravity/brain/7ac1f6f6-8985-450e-9094-73175bd19f4b/hero_tech_network_1770059465837.png';
+import aboutImage from '/Users/adarshkumarpandey21/.gemini/antigravity/brain/7ac1f6f6-8985-450e-9094-73175bd19f4b/about_tech_collaboration_1770059550200.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -60,7 +62,7 @@ export function Home() {
 
   return (
     <div className="min-h-screen">
-      <SEO 
+      <SEO
         title="Home - Building Digital Solutions That Drive Growth"
         description="CodingBits is a technology services company helping startups and businesses build modern web applications, mobile apps, and AI automation solutions."
       />
@@ -113,7 +115,7 @@ export function Home() {
             className="mt-16 relative"
           >
             <img
-              src="https://images.unsplash.com/photo-1766941288581-689187dd57d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2hub2xvZ3klMjBuZXR3b3JrJTIwYmx1ZXxlbnwxfHx8fDE3Njk5NjgwNjF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+              src={heroImage}
               alt="Technology Network"
               className="w-full h-64 md:h-96 object-cover rounded-2xl shadow-2xl"
             />
@@ -155,7 +157,7 @@ export function Home() {
               transition={{ duration: 0.6 }}
             >
               <img
-                src="https://images.unsplash.com/photo-1582736317407-371893d9e146?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB0ZWNoJTIwb2ZmaWNlJTIwY29sbGFib3JhdGlvbnxlbnwxfHx8fDE3Njk5OTY0Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                src={aboutImage}
                 alt="Modern Tech Office"
                 className="w-full h-96 object-cover rounded-2xl shadow-xl"
               />
