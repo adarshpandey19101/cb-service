@@ -35,6 +35,8 @@ export interface BlogPost {
     excerpt: string;
     content: string;
     image_url: string;
+    image?: string; // Added by API layer for compatibility
+    category?: string; // Optional field for future use
     author_id: string;
     published: boolean;
     created_at: string;

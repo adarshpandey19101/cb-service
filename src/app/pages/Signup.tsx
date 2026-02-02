@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, User, Building } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, User, Building, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import logoImage from '/logo.png';
 
 export function Signup() {
@@ -12,13 +13,58 @@ export function Signup() {
     password: '',
     confirmPassword: ''
   });
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { signUp, signInWithGoogle, signInWithLinkedIn } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock signup - in real app, this would create account with backend
+    setError('');
+
+    // Validation
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signUp({
+        email: formData.email,
+        password: formData.password,
+        fullName: formData.name,
+        company: formData.company || undefined,
+      });
+      navigate('/'); // Redirect to homepage on success
+    } catch (err: any) {
+      setError(err.message || 'Failed to create account. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setError('');
+      await signInWithGoogle();
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in with Google');
+    }
+  };
+
+  const handleLinkedInSignIn = async () => {
+    try {
+      setError('');
+      await signInWithLinkedIn();
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in with LinkedIn');
     }
   };
 
@@ -46,6 +92,14 @@ export function Signup() {
             <h2 className="text-2xl text-gray-900 mb-2">Create Your Account</h2>
             <p className="text-gray-600">Join us and start building</p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+              <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={18} />
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -161,9 +215,10 @@ export function Signup() {
 
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors"
+              disabled={loading}
+              className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
 
@@ -181,10 +236,7 @@ export function Signup() {
           <div className="grid grid-cols-2 gap-4 mb-6">
             <button
               type="button"
-              onClick={() => {
-                // Mock Google OAuth - in real app, this would redirect to Google OAuth
-                console.log('Google OAuth clicked');
-              }}
+              onClick={handleGoogleSignIn}
               className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors group"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -210,10 +262,7 @@ export function Signup() {
 
             <button
               type="button"
-              onClick={() => {
-                // Mock LinkedIn OAuth - in real app, this would redirect to LinkedIn OAuth
-                console.log('LinkedIn OAuth clicked');
-              }}
+              onClick={handleLinkedInSignIn}
               className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors group"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="#0A66C2">
@@ -240,7 +289,7 @@ export function Signup() {
             ← Back to Home
           </Link>
         </div>
-      </motion.div>
-    </div>
+      </motion.div >
+    </div >
   );
 }

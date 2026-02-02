@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { submitContactForm } from '@/lib/api/contact';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -17,15 +18,26 @@ export function Contact() {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, this would send data to a backend
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', company: '', message: '' });
-    }, 3000);
+    setError('');
+    setLoading(true);
+
+    try {
+      await submitContactForm(formData);
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: '', email: '', company: '', message: '' });
+      }, 5000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -140,6 +152,13 @@ export function Contact() {
                 </div>
               ) : null}
 
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6 flex items-start gap-2">
+                  <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={18} />
+                  <p className="text-sm text- red-600">{error}</p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-gray-700 mb-2">
@@ -206,9 +225,10 @@ export function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center justify-center gap-2"
+                  disabled={loading || isSubmitted}
+                  className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                   <Send size={18} />
                 </button>
               </form>

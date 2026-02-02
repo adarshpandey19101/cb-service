@@ -12,7 +12,8 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    // Map image_url to image for compatibility
+    return (data || []).map(post => ({ ...post, image: post.image_url }));
 }
 
 /**
