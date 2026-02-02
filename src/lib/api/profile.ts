@@ -12,6 +12,7 @@ export interface UserProfile {
     address: string | null;
     city: string | null;
     country: string | null;
+    linkedin_url: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -25,6 +26,7 @@ export interface ProfileUpdateData {
     city?: string;
     country?: string;
     profile_photo_url?: string | null;
+    linkedin_url?: string;
 }
 
 /**

@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getUserProfile, updateUserProfile, uploadProfilePhoto, type UserProfile, type ProfileUpdateData } from '@/lib/api/profile';
-import { User, Mail, Phone, Building2, MapPin, Edit2, Save, X, Camera } from 'lucide-react';
+import { User, Mail, Phone, Building2, MapPin, Edit2, Save, X, Camera, Linkedin } from 'lucide-react';
 
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -28,6 +28,7 @@ export function Profile() {
         address: '',
         city: '',
         country: 'India',
+        linkedin_url: '',
     });
 
     useEffect(() => {
@@ -51,6 +52,7 @@ export function Profile() {
                 address: data.address || '',
                 city: data.city || '',
                 country: data.country || 'India',
+                linkedin_url: data.linkedin_url || '',
             });
         } catch (err: any) {
             setError(err.message);
@@ -87,6 +89,7 @@ export function Profile() {
                 address: profile.address || '',
                 city: profile.city || '',
                 country: profile.country || 'India',
+                linkedin_url: profile.linkedin_url || '',
             });
         }
         setEditing(false);
@@ -306,6 +309,34 @@ export function Profile() {
                                 <div className="flex items-center gap-2 text-gray-900 py-3">
                                     <Building2 size={18} className="text-gray-400" />
                                     {profile?.company || 'Not set'}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* LinkedIn Profile */}
+                        <div>
+                            <label className="block text-sm text-gray-700 mb-2">LinkedIn Profile</label>
+                            {editing ? (
+                                <input
+                                    type="url"
+                                    value={formData.linkedin_url}
+                                    onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    placeholder="https://linkedin.com/in/yourprofile"
+                                />
+                            ) : (
+                                <div className="flex items-center gap-2 text-gray-900 py-3">
+                                    <Linkedin size={18} className="text-gray-400" />
+                                    {profile?.linkedin_url ? (
+                                        <a
+                                            href={profile.linkedin_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            View Profile
+                                        </a>
+                                    ) : 'Not set'}
                                 </div>
                             )}
                         </div>
