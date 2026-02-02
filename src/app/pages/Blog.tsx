@@ -88,9 +88,11 @@ export function Blog() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 bg-primary text-white text-xs rounded-full">
-                          {post.category}
-                        </span>
+                        {post.category && (
+                          <span className="px-3 py-1 bg-primary text-white text-xs rounded-full">
+                            {post.category}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="p-6">

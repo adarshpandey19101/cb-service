@@ -70,9 +70,11 @@ export function BlogDetail() {
               <ArrowLeft size={20} />
               Back to Blog
             </Link>
-            <span className="inline-block px-3 py-1 bg-primary text-white text-sm rounded-full mb-4">
-              {post.category}
-            </span>
+            {post.category && (
+              <span className="inline-block px-3 py-1 bg-primary text-white text-sm rounded-full mb-4">
+                {post.category}
+              </span>
+            )}
             <h1 className="text-3xl md:text-4xl lg:text-5xl text-gray-900 mb-6">
               {post.title}
             </h1>
