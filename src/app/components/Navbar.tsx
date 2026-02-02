@@ -75,13 +75,25 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg">
+                <Link
+                  to="/dashboard"
+                  className={`px-4 py-2 rounded-lg transition-colors ${isActivePath('/dashboard')
+                    ? 'bg-primary text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                >
                   <User size={18} className="text-primary" />
-                  <span className="text-sm text-gray-700">{user.email}</span>
-                </div>
+                  <span className="text-sm text-gray-700">Profile</span>
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-primary transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600 transition-colors"
                   title="Logout"
                 >
                   <LogOut size={18} />
@@ -140,20 +152,56 @@ export function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-4 py-2.5 text-primary border border-primary rounded-lg text-center hover:bg-primary/10 transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-4 py-2.5 bg-primary text-white rounded-lg text-center hover:bg-blue-900 transition-colors"
-              >
-                Get Started
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block px-4 py-2 rounded-lg transition-colors ${isActivePath('/dashboard')
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block px-4 py-2 rounded-lg transition-colors ${isActivePath('/profile')
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-4 py-2.5 text-primary border border-primary rounded-lg text-center hover:bg-primary/10 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-4 py-2.5 bg-primary text-white rounded-lg text-center hover:bg-blue-900 transition-colors"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}
