@@ -73,7 +73,7 @@ export function ProjectDetail() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen pt-24 flex items-center justify-center">
                 <div className="text-gray-600">Loading project...</div>
             </div>
         );
@@ -81,14 +81,14 @@ export function ProjectDetail() {
 
     if (!project) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen pt-24 flex items-center justify-center">
                 <div className="text-gray-600">Project not found</div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 {/* Back Button */}
                 <Link
@@ -156,8 +156,8 @@ export function ProjectDetail() {
                             <button
                                 onClick={() => setActiveTab('overview')}
                                 className={`pb-3 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'overview'
-                                        ? 'border-primary text-primary'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 Overview
@@ -165,8 +165,8 @@ export function ProjectDetail() {
                             <button
                                 onClick={() => setActiveTab('requirements')}
                                 className={`pb-3 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'requirements'
-                                        ? 'border-primary text-primary'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 Requirements ({requirements.length})
@@ -174,8 +174,8 @@ export function ProjectDetail() {
                             <button
                                 onClick={() => setActiveTab('activity')}
                                 className={`pb-3 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'activity'
-                                        ? 'border-primary text-primary'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 Activity
