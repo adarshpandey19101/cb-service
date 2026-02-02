@@ -2,8 +2,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Smartphone, Brain, CheckCircle } from 'lucide-react';
 import { SEO } from '@/app/components/SEO';
-import heroImage from '/Users/adarshkumarpandey21/.gemini/antigravity/brain/7ac1f6f6-8985-450e-9094-73175bd19f4b/hero_tech_network_1770059465837.png';
-import aboutImage from '/Users/adarshkumarpandey21/.gemini/antigravity/brain/7ac1f6f6-8985-450e-9094-73175bd19f4b/about_tech_collaboration_1770059550200.png';
+import heroImage from '/images/hero-tech-network.png';
+import aboutImage from '/images/about-tech-collaboration.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
