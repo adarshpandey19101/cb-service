@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getUserProfile, updateUserProfile, type UserProfile, type ProfileUpdateData } from '@/lib/api/profile';
-import { User, Mail, Phone, Building2, MapPin, Edit2, Save, X, Briefcase } from 'lucide-react';
+import { getUserProfile, updateUserProfile, uploadProfilePhoto, type UserProfile, type ProfileUpdateData } from '@/lib/api/profile';
+import { User, Mail, Phone, Building2, MapPin, Edit2, Save, X, Camera } from 'lucide-react';
 
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -18,6 +18,7 @@ export function Profile() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [uploading, setUploading] = useState(false);
 
     const [formData, setFormData] = useState<ProfileUpdateData>({
         full_name: '',
@@ -92,6 +93,39 @@ export function Profile() {
         setError('');
     };
 
+    const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !user) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            setError('Please select an image file');
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            setError('Image size should be less than 5MB');
+            return;
+        }
+
+        try {
+            setUploading(true);
+            setError('');
+            const photoUrl = await uploadProfilePhoto(user.id, file);
+
+            // Update profile with new photo URL
+            await updateUserProfile(user.id, { ...formData, profile_photo_url: photoUrl });
+            await loadProfile();
+            setSuccess('Profile photo updated successfully!');
+            setTimeout(() => setSuccess(''), 3000);
+        } catch (err: any) {
+            setError(err.message || 'Failed to upload photo');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen pt-24 flex items-center justify-center">
@@ -107,8 +141,39 @@ export function Profile() {
                 <motion.div {...fadeIn} className="bg-white rounded-2xl shadow-sm p-8 mb-6">
                     <div className="flex items-start justify-between">
                         <div className="flex items-center gap-6">
-                            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
-                                <User className="text-primary" size={48} />
+                            {/* Profile Photo with Upload */}
+                            <div className="relative group">
+                                <div className="w-24 h-24 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center">
+                                    {profile?.profile_photo_url ? (
+                                        <img
+                                            src={profile.profile_photo_url}
+                                            alt="Profile"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <User className="text-primary" size={48} />
+                                    )}
+                                </div>
+                                {/* Upload button overlay */}
+                                <label
+                                    htmlFor="photo-upload"
+                                    className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                >
+                                    <Camera className="text-white" size={24} />
+                                    {uploading && (
+                                        <div className="absolute inset-0 bg-black/70 rounded-full flex items-center justify-center">
+                                            <div className="text-white text-xs">Uploading...</div>
+                                        </div>
+                                    )}
+                                </label>
+                                <input
+                                    id="photo-upload"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoUpload}
+                                    className="hidden"
+                                    disabled={uploading}
+                                />
                             </div>
                             <div>
                                 <h1 className="text-3xl text-gray-900 mb-2">

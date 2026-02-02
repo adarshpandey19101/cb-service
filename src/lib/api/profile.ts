@@ -24,6 +24,7 @@ export interface ProfileUpdateData {
     address?: string;
     city?: string;
     country?: string;
+    profile_photo_url?: string | null;
 }
 
 /**
