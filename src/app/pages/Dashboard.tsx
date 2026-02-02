@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { getProjects, getProjectStats, type Project } from '@/lib/api/projects';
 import { getUserProfile, type UserProfile } from '@/lib/api/profile';
-import { FolderOpen, CheckCircle, Clock, Pause, Plus, ArrowRight } from 'lucide-react';
+import { FolderOpen, CheckCircle, Clock, Pause, Plus, ArrowRight, User, LogOut } from 'lucide-react';
 
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -13,7 +13,7 @@ const fadeIn = {
 };
 
 export function Dashboard() {
-    const { user } = useAuth();
+    const { user, signOut } = useAuth();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [recentProjects, setRecentProjects] = useState<Project[]>([]);
     const [stats, setStats] = useState({
@@ -72,12 +72,44 @@ export function Dashboard() {
     return (
         <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                {/* Welcome Header */}
-                <motion.div {...fadeIn} className="mb-8">
-                    <h1 className="text-4xl text-gray-900 mb-2">
-                        Welcome back, {profile?.full_name || 'there'}! 👋
-                    </h1>
-                    <p className="text-gray-600">Here's what's happening with your projects</p>
+                {/* Header with Profile */}
+                <motion.div {...fadeIn} className="bg-white rounded-2xl shadow-sm p-6 mb-8">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            {/* Profile Photo */}
+                            <div className="w-20 h-20 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                {profile?.profile_photo_url ? (
+                                    <img
+                                        src={profile.profile_photo_url}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <User className="text-primary" size={40} />
+                                )}
+                            </div>
+
+                            {/* User Info */}
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900 mb-1">
+                                    Welcome back, {profile?.full_name || 'there'}! 👋
+                                </h1>
+                                <p className="text-gray-600">Here's what's happening with your projects</p>
+                            </div>
+                        </div>
+
+                        {/* Logout Button */}
+                        <button
+                            onClick={async () => {
+                                await signOut();
+                                window.location.href = '/';
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                            <LogOut size={18} />
+                            Logout
+                        </button>
+                    </div>
                 </motion.div>
 
                 {/* Stats Cards */}

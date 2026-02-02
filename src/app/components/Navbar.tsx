@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, User } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '@/hooks/useAuth';
 import logoImage from '/logo.png';
@@ -8,17 +8,7 @@ import logoImage from '/logo.png';
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user, signOut } = useAuth();
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      navigate('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
+  const { user } = useAuth();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -84,20 +74,6 @@ export function Navbar() {
                 >
                   Dashboard
                 </Link>
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                >
-                  <User size={18} className="text-primary" />
-                  <span className="text-sm text-gray-700">Profile</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600 transition-colors"
-                  title="Logout"
-                >
-                  <LogOut size={18} />
-                </button>
               </div>
             ) : (
               <>
@@ -158,31 +134,12 @@ export function Navbar() {
                     to="/dashboard"
                     onClick={() => setIsMenuOpen(false)}
                     className={`block px-4 py-2 rounded-lg transition-colors ${isActivePath('/dashboard')
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-gray-600 hover:bg-gray-50'
                       }`}
                   >
                     Dashboard
                   </Link>
-                  <Link
-                    to="/profile"
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`block px-4 py-2 rounded-lg transition-colors ${isActivePath('/profile')
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-red-600 border border-red-600 rounded-lg hover:bg-red-50 transition-colors"
-                  >
-                    Logout
-                  </button>
                 </>
               ) : (
                 <>
