@@ -11,6 +11,7 @@
 [![Powered by Supabase](https://img.shields.io/badge/Supabase-Backend-green)](https://supabase.com/)
 [![Deployed on Vercel](https://img.shields.io/badge/Vercel-Deployed-black)](https://vercel.com/)
 
+
 [Live Demo](https://codingbits.in) · [Report Bug](#) · [Request Feature](#)
 
 </div>
