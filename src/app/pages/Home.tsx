@@ -77,10 +77,10 @@ export function Home() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-tight"
             >
               Building Digital Solutions That{' '}
-              <span className="text-primary">Drive Growth</span>
+              <span className="text-primary bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text">Drive Growth</span>
             </motion.h1>
             <motion.p
               variants={fadeInUp}
@@ -92,19 +92,23 @@ export function Home() {
               variants={fadeInUp}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Link
-                to="/contact"
-                className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2"
-              >
-                Talk to Us
-                <ArrowRight size={20} />
-              </Link>
-              <Link
-                to="/services"
-                className="px-8 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-blue-50 transition-colors"
-              >
-                Explore Services
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/contact"
+                  className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl w-full sm:w-auto justify-center font-medium"
+                >
+                  Talk to Us
+                  <ArrowRight size={20} />
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/services"
+                  className="px-8 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-blue-50 transition-all w-full sm:w-auto justify-center font-medium"
+                >
+                  Explore Services
+                </Link>
+              </motion.div>
             </motion.div>
           </motion.div>
 
@@ -114,10 +118,12 @@ export function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-16 relative"
           >
-            <img
+            <motion.img
               src={heroImage}
               alt="Technology Network"
-              className="w-full h-64 md:h-96 object-cover rounded-2xl shadow-2xl"
+              className="w-full h-64 md:h-96 lg:h-[500px] object-cover rounded-2xl shadow-2xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
             />
           </motion.div>
         </div>
@@ -133,7 +139,7 @@ export function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-4xl text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Founded on the belief that <span className="text-primary">technology should empower</span>
               </h2>
               <p className="text-gray-600 mb-4">
@@ -142,13 +148,15 @@ export function Home() {
               <p className="text-gray-600 mb-6">
                 We work with startups, founders, and growing businesses to build digital products that solve real problems. Our approach combines technical expertise with a deep understanding of business needs.
               </p>
-              <Link
-                to="/about"
-                className="inline-flex items-center text-primary hover:text-blue-900 transition-colors gap-2"
-              >
-                Learn More About Us
-                <ArrowRight size={20} />
-              </Link>
+              <motion.div whileHover={{ x: 5 }} className="inline-block">
+                <Link
+                  to="/about"
+                  className="inline-flex items-center text-primary hover:text-blue-900 transition-colors gap-2 font-medium"
+                >
+                  Learn More About Us
+                  <ArrowRight size={20} />
+                </Link>
+              </motion.div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -156,10 +164,12 @@ export function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <img
+              <motion.img
                 src={aboutImage}
                 alt="Modern Tech Office"
-                className="w-full h-96 object-cover rounded-2xl shadow-xl"
+                className="w-full h-80 md:h-96 lg:h-[480px] object-cover rounded-2xl shadow-xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
               />
             </motion.div>
           </div>
@@ -192,11 +202,14 @@ export function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                whileHover={{ y: -5 }}
+                className="bg-white p-6 md:p-8 rounded-xl shadow-sm hover:shadow-lg transition-all"
               >
-                <CheckCircle className="text-primary mb-4" size={32} />
-                <h3 className="text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.description}</p>
+                <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
+                  <CheckCircle className="text-primary mb-4" size={32} />
+                </motion.div>
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-sm md:text-base text-gray-600">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -229,18 +242,27 @@ export function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-blue-50 p-8 rounded-2xl hover:shadow-lg transition-shadow group"
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 md:p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all group"
               >
-                <service.icon className="text-primary mb-4 group-hover:scale-110 transition-transform" size={40} />
-                <h3 className="text-xl text-gray-900 mb-3">{service.title}</h3>
-                <p className="text-gray-600 mb-4">{service.description}</p>
-                <Link
-                  to={service.link}
-                  className="inline-flex items-center text-primary hover:text-blue-900 transition-colors gap-2"
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
+                  transition={{ duration: 0.5 }}
+                  className="inline-block"
                 >
-                  Learn More
-                  <ArrowRight size={16} />
-                </Link>
+                  <service.icon className="text-primary mb-4" size={40} />
+                </motion.div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                <p className="text-gray-600 mb-6">{service.description}</p>
+                <motion.div whileHover={{ x: 5 }} className="inline-block">
+                  <Link
+                    to={service.link}
+                    className="inline-flex items-center text-primary hover:text-blue-900 transition-colors gap-2 font-medium"
+                  >
+                    Learn More
+                    <ArrowRight size={16} />
+                  </Link>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -262,12 +284,14 @@ export function Home() {
             <p className="text-lg text-blue-100 mb-8">
               Let's discuss how we can help you build the digital solutions your business needs.
             </p>
-            <Link
-              to="/contact"
-              className="inline-block px-8 py-3 bg-white text-primary rounded-lg hover:bg-blue-50 transition-colors"
-            >
-              Get in Touch
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/contact"
+                className="inline-block px-8 py-3.5 bg-white text-primary rounded-lg hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl font-medium"
+              >
+                Get in Touch
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
