@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Navbar } from '@/app/components/Navbar';
 import { Footer } from '@/app/components/Footer';
@@ -33,19 +34,41 @@ function ScrollToTop() {
   return null;
 }
 
-// Layout wrapper
+// Layout wrapper with page transitions
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
 
   if (isAuthPage) {
-    return <>{children}</>;
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
+    );
   }
 
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
       <Footer />
       <ScrollToTopButton />
     </>
