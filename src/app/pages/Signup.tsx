@@ -44,7 +44,14 @@ export function Signup() {
       });
       navigate('/'); // Redirect to homepage on success
     } catch (err: any) {
-      setError(err.message || 'Failed to create account. Please try again.');
+      const errorMessage = err.message || 'Failed to create account. Please try again.';
+
+      // Check if error is about existing user
+      if (errorMessage.toLowerCase().includes('already') || errorMessage.toLowerCase().includes('exists')) {
+        setError('This email is already registered. Try logging in with Google or use the "Forgot Password" link on the login page to set a password.');
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }

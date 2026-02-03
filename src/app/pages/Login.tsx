@@ -24,7 +24,14 @@ export function Login() {
       await signIn(formData);
       navigate('/'); // Redirect to homepage on success
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.');
+      const errorMessage = err.message || 'Failed to sign in. Please check your credentials.';
+
+      // Check if error is about invalid credentials
+      if (errorMessage.toLowerCase().includes('invalid') || errorMessage.toLowerCase().includes('credentials')) {
+        setError('Invalid email or password. If you signed up with Google, please use the Google login button below or set a password first.');
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }

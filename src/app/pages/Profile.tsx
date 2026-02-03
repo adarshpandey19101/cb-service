@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getUserProfile, updateUserProfile, uploadProfilePhoto, type UserProfile, type ProfileUpdateData } from '@/lib/api/profile';
+import { supabase } from '@/lib/supabase';
 import { User, Mail, Phone, Building2, MapPin, Edit2, Save, X, Camera, Linkedin } from 'lucide-react';
 
 const fadeIn = {
@@ -19,6 +20,10 @@ export function Profile() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [uploading, setUploading] = useState(false);
+    const [settingPassword, setSettingPassword] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isOAuthUser, setIsOAuthUser] = useState(false);
 
     const [formData, setFormData] = useState<ProfileUpdateData>({
         full_name: '',
@@ -54,6 +59,10 @@ export function Profile() {
                 country: data.country || 'India',
                 linkedin_url: data.linkedin_url || '',
             });
+
+            // Check if user is OAuth user (Google, LinkedIn, etc.)
+            const provider = user.app_metadata?.provider;
+            setIsOAuthUser(provider !== 'email' && provider !== undefined);
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -126,6 +135,47 @@ export function Profile() {
             setError(err.message || 'Failed to upload photo');
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handleSetPassword = async () => {
+        if (!user) return;
+
+        // Validation
+        if (!newPassword || !confirmPassword) {
+            setError('Please fill in both password fields');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setError('Password must be at least 6 characters');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        try {
+            setSettingPassword(true);
+            setError('');
+
+            const { error: updateError } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (updateError) throw updateError;
+
+            setSuccess('Password set successfully! You can now login with email/password.');
+            setNewPassword('');
+            setConfirmPassword('');
+            setIsOAuthUser(false); // User now has password
+            setTimeout(() => setSuccess(''), 3000);
+        } catch (err: any) {
+            setError(err.message || 'Failed to set password');
+        } finally {
+            setSettingPassword(false);
         }
     };
 
@@ -398,6 +448,56 @@ export function Profile() {
                         </div>
                     </div>
                 </motion.div>
+
+                {/* Set Password Section - Only for OAuth Users */}
+                {isOAuthUser && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-white rounded-2xl shadow-sm p-8 mb-8"
+                    >
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Set Password</h2>
+                            <p className="text-gray-600">
+                                You logged in with Google. Set a password to also login with email/password.
+                            </p>
+                        </div>
+
+                        <div className="max-w-md space-y-4">
+                            <div>
+                                <label className="block text-sm text-gray-700 mb-2">New Password</label>
+                                <input
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    placeholder="Enter new password (min 6 characters)"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm text-gray-700 mb-2">Confirm Password</label>
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    placeholder="Confirm your password"
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleSetPassword}
+                                disabled={settingPassword}
+                                className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Save size={18} />
+                                {settingPassword ? 'Setting Password...' : 'Set Password'}
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
             </div>
         </div>
     );
